@@ -2878,7 +2878,7 @@ import ProxySelector from '@/components/common/ProxySelector.vue'
 import GroupSelector from '@/components/common/GroupSelector.vue'
 import ModelWhitelistSelector from '@/components/account/ModelWhitelistSelector.vue'
 import QuotaLimitCard from '@/components/account/QuotaLimitCard.vue'
-import { applyInterceptWarmup } from '@/components/account/credentialsBuilder'
+import { applyInterceptWarmup, applyRefreshTokenFallback } from '@/components/account/credentialsBuilder'
 import { formatDateTimeLocalInput, parseDateTimeLocalInput } from '@/utils/format'
 import { createStableObjectKeyResolver } from '@/utils/stableObjectKey'
 import {
@@ -4420,6 +4420,7 @@ const handleOpenAIBatchRT = async (refreshTokenInput: string, clientId?: string)
         }
 
         const credentials = oauthClient.buildCredentials(tokenInfo)
+        applyRefreshTokenFallback(credentials, refreshTokens[i])
         if (clientId) {
           credentials.client_id = clientId
         }
